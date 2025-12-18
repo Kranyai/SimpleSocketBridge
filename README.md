@@ -24,3 +24,7 @@ SSB uses a minimal binary protocol over raw sockets to keep overhead low.
 ## Status
 Early / experimental.
 Looking for engineers interested in testing, benchmarking, or breaking it.
+
+## Contact
+If you’re working on sim / RL / robotics and want to test this,
+feel free to open an issue or email: k3nz3y01@gmail.com
