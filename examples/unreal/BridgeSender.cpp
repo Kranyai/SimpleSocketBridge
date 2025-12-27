@@ -309,4 +309,5 @@ void ABridgeSender::RunCombinedTest()
     FPlatformProcess::Sleep(0.5f);
 
     UE_LOG(LogTemp, Warning, TEXT("Combined test end"));
+
 }
