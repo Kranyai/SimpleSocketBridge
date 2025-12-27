@@ -9,6 +9,24 @@ high-frequency control and sim-to-real workflows.
 
 SSB uses a minimal binary protocol over raw sockets to keep overhead low.
 
+## Architecture (high-level)
+
+```
+UE 5.5 (C++)
+└─ SSB Plugin
+├─ Raw socket (binary messages)
+├─ Minimal fixed-size header
+└─ Tight send/receive loop
+↓
+Python 3.x
+└─ SSB Client
+├─ recv → decode
+└─ encode → send (control / actions)
+```
+
+SSB bypasses Unreal RPC, shared memory, and object serialization.
+Data is exchanged as small binary frames over raw sockets to minimize latency and jitter.
+
 ## Measured Performance
 - ~0.28 ms round-trip latency (local, sustained)
 - ~1.9 GB/s throughput per thread
