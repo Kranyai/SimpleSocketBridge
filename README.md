@@ -1,8 +1,10 @@
 # SimpleSocketBridge (SSB)
 
-Raw-socket Unreal Engine 5.5 data bridge for tight simulation and reinforcement learning loops.
+Low-latency, high-throughput binary transport for tight simulation and
+reinforcement-learning loops, with first-class Unreal Engine 5.5 integration.
 
-SSB enables low-latency, high-throughput data exchange between Unreal and an external process (commonly Python), without relying on Unreal RPC, reflection, or shared memory.
+SSB can be used either as an Unreal Engine component or as an independent
+standalone runtime for simulator and control pipelines.
 
 ---
 
@@ -80,6 +82,36 @@ These represent the exact setup used to produce the measured results below.
 
 ---
 
+## Testing & Methodology
+
+SSB is validated using explicit, reproducible test harnesses designed to measure
+control freshness, tick alignment, and backlog behavior before scaling to
+multi-agent workloads.
+
+### Single-Agent Baseline
+
+A frozen single-agent reference harness is provided under:
+
+- `examples/single_agent_v1/`
+
+This baseline validates:
+
+- Latest-packet-wins control semantics
+- Tick-aligned control application
+- Bounded control age under sustained frequency
+- Absence of backlog or queue buildup
+
+These tests are intentionally limited to **one logical agent** and serve as the
+baseline for all subsequent multi-agent evaluation.
+
+### Standalone vs Unreal Testing
+
+The same reference test servers are used across standalone and Unreal-based tests
+to ensure observed differences originate from the host environment rather than
+the SSB transport or protocol.
+
+---
+
 ## Measured Performance
 
 - ~0.28 ms round-trip latency (local, sustained)
@@ -87,6 +119,9 @@ These represent the exact setup used to produce the measured results below.
 - 24h endurance test with zero disconnects
 
 (Tested on UE 5.5 + Python 3.x, Windows)
+
+Standalone transport benchmarks are provided separately and represent raw SSB
+capability outside any game engine or simulator.
 
 ---
 
