@@ -1,0 +1,169 @@
+SSB + CARLA Integration
+Control Freshness, Backlog, and Throughput Characterization
+1. Scope and intent
+
+This document characterizes SimpleSocketBridge (SSB) when integrated with CARLA in synchronous mode.
+
+Primary goal
+
+Determine whether high-frequency control commands can be delivered into CARLA without backlog or queue growth, and identify the true limiting factor in end-to-end control timing.
+
+Out of scope
+
+Measuring “SSB latency inside CARLA”
+
+Claiming real-time control guarantees without pacing
+
+Comparing CARLA physics performance to transport performance
+
+2. Baseline: standalone SSB transport
+
+Measured outside CARLA on loopback.
+
+Standalone executable (EXE)
+
+Average latency: ~0.14–0.15 ms
+
+Sustained throughput: ~8.45 GB/s
+
+This represents the raw transport ceiling of SSB in an isolated process.
+
+Embedded library (DLL)
+
+Sustained throughput: ~5.30 GB/s
+
+The reduction from EXE → DLL is expected and reflects:
+
+DLL call/return overhead
+
+ABI and stack transitions
+
+Host process scheduling and cache effects
+
+Both figures are orders of magnitude above CARLA control bandwidth requirements (control packets are tens of bytes).
+
+3. CARLA integration setup
+CARLA configuration
+
+Headless server
+
+Synchronous mode enabled
+
+Fixed simulation timestep (fixed_delta_seconds)
+
+Substepping disabled
+
+Rendering disabled (-RenderOffScreen)
+
+Control pipeline
+Sender → UDP → SSB core (latest-only forwarding)
+       → UDP → Python adapter → vehicle.apply_control()
+
+Design choice: latest-only forwarding
+
+Only the most recent control command is forwarded
+
+No internal queues
+
+Prevents backlog accumulation by construction
+
+4. What is measured in CARLA
+
+CARLA measurements do not attempt to measure raw SSB transport latency.
+
+They characterize control correctness relative to simulator ticks.
+
+Metrics
+
+Simulation dt (Hz)
+Defined by fixed_delta_seconds. Represents simulation time progression.
+
+Achieved tick rate (Hz)
+Wall-clock rate at which world.tick() completes.
+This reflects CARLA + system throughput, not transport speed.
+
+Freshness (%)
+Percentage of CARLA ticks that observed at least one new control command since the previous tick.
+
+Adapter cost (µs)
+Wall-time cost of vehicle.apply_control() in the Python adapter only.
+
+Max wait (ticks)
+Maximum number of CARLA ticks a received command waited before being applied.
+This is the primary backlog indicator.
+
+5. Correctness rules (critical)
+
+Metrics are interpreted only on fresh ticks
+
+Ticks with no new command are marked STALE
+
+No latency is inferred from stale ticks
+
+max_wait ≥ 2 ticks indicates backlog / queueing
+
+max_wait = 0 or 1 indicates no backlog
+
+Negative or zero “age” values indicate immediate application, not negative latency.
+
+6. Key integration findings
+Backlog behavior
+
+Across runs with CARLA in synchronous mode:
+
+No backlog observed up to ≥100 Hz sender rates
+
+max_wait consistently remained 0
+
+No queue growth or delayed application occurred
+
+This holds even when sender frequency exceeds CARLA tick throughput.
+
+Adapter overhead
+
+Adapter cost p95: ~30–60 µs
+
+Stable across increasing sender rates
+
+The Python adapter and CARLA API are not the limiting factor.
+
+Limiting factor
+
+End-to-end control timing is dominated by CARLA synchronous tick throughput, not by SSB transport or adapter overhead.
+
+On the test system:
+
+Achieved CARLA tick throughput: ~35–45 Hz
+
+Increasing sender rate increases freshness, not tick rate
+
+7. Interpretation of freshness behavior
+
+When sender rate > achieved CARLA tick rate:
+
+Freshness may decrease if world.tick() is called faster than commands arrive
+
+This reflects tick oversampling, not transport failure
+
+Backlog absence (max_wait = 0) confirms correct behavior
+
+Freshness collapse without backlog is not a failure mode.
+
+8. What can be safely claimed
+
+✔ SSB delivers high-frequency control commands into CARLA without backlog
+✔ Latest-only forwarding prevents queue buildup
+✔ Transport and adapter overhead are negligible relative to simulator timing
+✔ CARLA tick throughput is the dominant limiter
+
+9. What is explicitly not claimed
+
+✘ “SSB latency inside CARLA”
+✘ Real-time guarantees without pacing
+✘ CARLA physics performance improvements
+✘ Throughput relevance to CARLA control workloads
+
+10. Bottom line
+
+SSB sustains multi-GB/s throughput standalone and remains multi-GB/s when embedded.
+In CARLA integration, control correctness is limited by simulator tick throughput, not by transport or adapter performance.
