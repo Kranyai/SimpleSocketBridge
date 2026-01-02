@@ -63,6 +63,20 @@ A short unlisted demo showing SSB running with the reference test servers:
 
 ▶ https://youtu.be/cRMRFwMp0u4
 
+## CARLA Integration Demo (128 Agents)
+
+An unlisted technical demo showing SimpleSocketBridge driving 128 CARLA vehicles
+with ~32 KB control payloads in synchronous mode.
+
+- CARLA shipping build (headless)
+- 128 agents
+- 20 Hz control
+- Latest-only UDP transport
+- ~48 minute unattended run
+
+📹 Video demo (unlisted):
+https://youtu.be/UO_P2Vj7YOQ
+
 ---
 
 ## Reference demo implementation
