@@ -1,3 +1,6 @@
+🔽 Download runnable verification build:
+[https://github.com/Kranyai/SimpleSocketBridge/releases/latest](https://github.com/Kranyai/SimpleSocketBridge/releases/tag/v0.1-transport-proof)
+
 # SimpleSocketBridge (SSB)
 
 Low-latency, high-throughput binary transport for tight simulation and
