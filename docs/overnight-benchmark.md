@@ -72,3 +72,44 @@ Future runs will include physical NIC tests and CPU pinning.
 Notes on Baseline Comparison
 
 An equivalent ASIO-based harness was run using the same protocol framing and measurement window sizes to avoid tool-induced bias.
+
+Linux Verification Run (WSL2, 30 Minutes)
+
+In addition to the Windows overnight runs, I built and published Linux verification binaries from the same transport layer and exercised the identical stress harness for a shorter endurance run.
+
+Release: v0.2-transport-proof-linux
+
+Environment
+
+OS: Ubuntu 22.04 (WSL2)
+Kernel: WSL2 default
+Compiler: GCC 11.4
+CPU: Ryzen 7950X
+
+Duration: 30 minutes
+Threads: 8
+Payload: 32 KB
+
+Command used:
+
+./ssb_stress_client_public \
+  --threads 8 \
+  --payload 32768 \
+  --duration 1800 \
+  --csv endurance_30m_t8_p32k.csv
+
+
+Summary
+
+• sustained throughput remained stable over the run
+• latency percentiles did not drift
+• RSS memory stayed flat
+• no disconnects or transport errors were observed
+
+Raw CSV:
+docs/data/endurance_30m_t8_p32k.csv
+
+Linux binaries + hashes:
+[(link the GitHub release)](https://github.com/Kranyai/SimpleSocketBridge/releases/tag/v0.2-transport-proof-linux)
+
+These Linux runs were intended to validate portability and instrumentation consistency rather than replace the longer Windows endurance tests.
