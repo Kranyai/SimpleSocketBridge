@@ -1,0 +1,29 @@
+SYSTEM SPECS
+
+OS:
+- Windows 10 Pro 22H2 (build 19045)
+
+CPU:
+- Intel Core Ultra 9 285K
+- 24 cores / 24 threads
+- Base ~3.7 GHz, boost ~5.0 GHz
+
+Memory:
+- 128 GB DDR5
+- 4400 MHz
+- 4 / 4 slots populated
+
+GPU:
+- NVIDIA RTX A4500
+- 20 GB VRAM
+
+Storage:
+- Samsung SSD 990 PRO 1TB (C:)
+- Samsung SSD 990 PRO 1TB (E:)
+
+Compiler:
+- MSVC 19.38 (Visual Studio 2022)
+- x64 Native Tools
+
+Transport for benchmarks:
+- TCP over localhost (127.0.0.1)
