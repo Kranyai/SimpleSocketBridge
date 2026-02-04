@@ -113,3 +113,20 @@ Linux binaries + hashes:
 [(link the GitHub release)](https://github.com/Kranyai/SimpleSocketBridge/releases/tag/v0.2-transport-proof-linux)
 
 These Linux runs were intended to validate portability and instrumentation consistency rather than replace the longer Windows endurance tests.
+
+## 📊 Time-Series Plots
+
+### Windows 8h Throughput
+![Throughput](img/overnight_throughput.png)
+
+### Windows 8h p99 Latency
+![Latency](img/overnight_p99.png)
+
+### Windows RSS Memory
+![RSS](img/overnight_rss.png)
+
+### Linux 30m Throughput
+![Throughput](img/linux_30m_throughput.png)
+
+### Linux 30m p99 Latency
+![Latency](img/linux_30m_p99.png)
