@@ -1,3 +1,9 @@
+📊 Public Transport Benchmarks & Endurance Runs
+
+Sustained 12+ GB/s for 8 hours on Windows with flat RSS memory and zero transport errors, plus Linux verification runs with full CSV + plots.
+
+➡️ See: docs/benchmarks.md
+
 🔽 Download runnable verification build:
 [https://github.com/Kranyai/SimpleSocketBridge/releases/latest](https://github.com/Kranyai/SimpleSocketBridge/releases/tag/v0.1-transport-proof)
 
